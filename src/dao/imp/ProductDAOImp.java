@@ -5,10 +5,7 @@ import entity.Product;
 import entity.StatictisProduct;
 import util.ConnectionDB;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Types;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -218,5 +215,41 @@ public class ProductDAOImp implements ProductDAO {
             ConnectionDB.closeConnection(conn, callSt);
         }
         return listStatiticProduct;
+    }
+
+    @Override
+    public boolean createBatchProducts(List<Product> listProducts) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            //set trạng thái autoCommit của transaction
+            //Table - engine = InnoDB - MyISAM
+            conn.setAutoCommit(false);
+            callSt = conn.prepareCall("{call create_product(?,?,?,?,?,?)}");
+            for (Product product : listProducts) {
+                callSt.setString(1, product.getProductName());
+                callSt.setFloat(2, product.getPrice());
+                callSt.setString(3, product.getTitle());
+                callSt.setDate(4, java.sql.Date.valueOf(product.getCreated()));
+                callSt.setString(5, product.getCatalog());
+                callSt.setBoolean(6, product.isStatus());
+                callSt.executeUpdate();
+            }
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Có lỗi trong quá trình thêm các sản phẩm, thực hiện rollback dữ liêu");
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return false;
     }
 }

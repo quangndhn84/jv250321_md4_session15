@@ -21,4 +21,6 @@ public interface ProductDAO {
     List<Product> searchByName(String productName);
 
     List<StatictisProduct> listStatiticProducts();
+
+    boolean createBatchProducts(List<Product> listProducts);
 }

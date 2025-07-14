@@ -16,4 +16,6 @@ public interface ProductBusiness {
     void sortProductByPriceASC();
 
     void statitisProductByCatalog();
+
+    void createBatchProduct(Scanner scanner);
 }

@@ -22,7 +22,8 @@ public class Main {
             System.out.println("5. Tìm kiếm sản phẩm theo tên sản phẩm");
             System.out.println("6. Sắp xếp sản phẩm theo giá tăng dần");
             System.out.println("7. Thống kê số lượng sản phẩm theo danh mục");
-            System.out.println("8. Thoát");
+            System.out.println("8. Thêm mới nhiều sản phẩm");
+            System.out.println("9. Thoát");
             System.out.print("Lựa chọn của bạn:");
             int choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
@@ -48,9 +49,12 @@ public class Main {
                     main.productBusiness.statitisProductByCatalog();
                     break;
                 case 8:
+                    main.productBusiness.createBatchProduct(scanner);
+                    break;
+                case 9:
                     System.exit(0);
                 default:
-                    System.err.println("Vui lòng chọn từ 1-8");
+                    System.err.println("Vui lòng chọn từ 1-9");
             }
         } while (true);
     }

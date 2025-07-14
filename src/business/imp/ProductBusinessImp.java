@@ -7,6 +7,7 @@ import entity.Product;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -139,5 +140,23 @@ public class ProductBusinessImp implements ProductBusiness {
     @Override
     public void statitisProductByCatalog() {
         productDAO.listStatiticProducts().forEach(System.out::println);
+    }
+
+    @Override
+    public void createBatchProduct(Scanner scanner) {
+        List<Product> listProducts = new ArrayList<>();
+        System.out.println("Nhập vào số lượng sản phẩm cần thêm mới:");
+        int cntProduct = Integer.parseInt(scanner.nextLine());
+        for (int i = 0; i < cntProduct; i++) {
+            Product product = new Product();
+            product.inputData(scanner);
+            listProducts.add(product);
+        }
+        boolean result = productDAO.createBatchProducts(listProducts);
+        if (result) {
+            System.out.println("Thêm mới các sản phẩm thành công");
+        } else {
+            System.err.println("Có lỗi trong quá trình thêm mới các sản phẩm");
+        }
     }
 }
